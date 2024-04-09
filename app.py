@@ -3,17 +3,18 @@ import matplotlib.pyplot as plt
 import mpld3
 import streamlit.components.v1 as components
 from PIL import Image
+from data import *
 
 st.set_page_config(
     page_title='Анализ данных о заработных платах',
     layout='wide'
 )
+connection = st.connection("postgresql", type="sql")
 
-from data import *
 
 st.header('Среднемесячная номинальная заработная плата по трем видам экономической деятельности за 2000-2023 гг.', anchor='salaries')
 
-df_salaries = get_salaries()
+df_salaries = get_salaries(connection)
 st.dataframe(df_salaries)
 
 st.write('Построим графики изменения номинальной заработной платы (НЗП) по годам для этих видов экономической деятельности (графики интерактивны):')
@@ -80,13 +81,13 @@ st.write('''
 
 st.header('Инфляция', anchor='inflation')
 
-df_inflation = get_inflation()
+df_inflation = get_inflation(connection)
 st.dataframe(df_inflation)
 
 
 st.header('Среднемесячная реальная заработная плата по трем видам экономической деятельности за 2000-2023 гг.', anchor='salaries-real')
 
-df_salaries_real = get_salaries_real()
+df_salaries_real = get_salaries_real(connection)
 st.dataframe(df_salaries_real)
 
 st.write('По данным видно, что **значения заработных плат** за каждый год **снизились**.')
@@ -94,7 +95,7 @@ st.write('По данным видно, что **значения заработ
 
 st.header('Влияние инфляции на изменение заработной платы по сравнению с предыдущим годом', anchor='inflation-influence')
 
-df_inflation_influence = get_inflation_influence()
+df_inflation_influence = get_inflation_influence(connection)
 st.dataframe(df_inflation_influence)
 
 st.write('**Вывод**: из расчетов видно, что по всем трем областям идет резкое снижение **ИРЗП** в 2009-2010 гг., '
@@ -159,7 +160,7 @@ plt.legend(loc=2)
 plt.grid()
 st.pyplot(fig)
 
-st.write('На всех трех графиках видно, что НЗП и РЗП сначала идут почти вровень, но потом можно наблюдать снижение РЗП относительно НЗП.')
+st.write('**Вывод:** На всех трех графиках видно, что НЗП и РЗП сначала идут почти вровень, но потом можно наблюдать снижение РЗП относительно НЗП.')
 
 
 with st.sidebar:
