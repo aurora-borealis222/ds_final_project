@@ -1,9 +1,8 @@
 import streamlit as st
-import pandas as pd
 import matplotlib.pyplot as plt
 import mpld3
 import streamlit.components.v1 as components
-from streamlit_option_menu import option_menu
+from PIL import Image
 
 from data import get_salaries, get_inflation, get_salaries_real, get_inflation_influence
 
@@ -27,11 +26,10 @@ plt.plot(years, construction, marker='o')
 plt.title('Строительство')
 plt.xlabel('Год')
 plt.ylabel('НЗП, рублей')
-# plt.grid()
-# st.pyplot(fig)
 
 fig_html = mpld3.fig_to_html(fig)
 components.html(fig_html, height=600)
+
 
 education = df_salaries['education']
 fig = plt.figure()
@@ -39,11 +37,10 @@ plt.plot(years, education, marker='o')
 plt.title('Образование')
 plt.xlabel('Год')
 plt.ylabel('НЗП, рублей')
-# plt.grid()
-# st.pyplot(fig)
 
 fig_html = mpld3.fig_to_html(fig)
 components.html(fig_html, height=600)
+
 
 healthcare_social_services = df_salaries['healthcare_social_services']
 fig = plt.figure()
@@ -51,8 +48,6 @@ plt.plot(years, healthcare_social_services, marker='o')
 plt.title('Здравоохранение и социальные услуги')
 plt.xlabel('Год')
 plt.ylabel('НЗП, рублей')
-# plt.grid()
-# st.pyplot(fig)
 
 fig_html = mpld3.fig_to_html(fig)
 components.html(fig_html, height=600)
@@ -69,7 +64,6 @@ plt.plot(years, healthcare_social_services, marker='o', label='Здравоох�
 plt.xlabel('Год')
 plt.ylabel('НЗП, рублей')
 plt.legend(loc=2)
-# plt.grid()
 
 fig_html = mpld3.fig_to_html(fig)
 components.html(fig_html, height=600)
@@ -90,7 +84,7 @@ df_inflation = get_inflation()
 st.dataframe(df_inflation)
 
 
-st.header('Среднемесячная реальная заработная плата по трем видам экономической за 2000-2023 гг.', anchor='salaries-real')
+st.header('Среднемесячная реальная заработная плата по трем видам экономической деятельности за 2000-2023 гг.', anchor='salaries-real')
 
 df_salaries_real = get_salaries_real()
 st.dataframe(df_salaries_real)
@@ -108,7 +102,7 @@ st.write('**Вывод**: из расчетов видно, что по всем
 
 st.write('Отобразим график влияния инфляция на изменение реальной заработной платы по сравнению с предыдущим годом:')
 
-fig = plt.figure(figsize=(10, 5))
+fig = plt.figure(figsize=(8, 4))
 
 years = df_inflation_influence['year']
 
@@ -119,6 +113,7 @@ healthcare_real_index = df_inflation_influence['healthcare_social_services_real_
 plt.plot(years, construction_real_index, marker='o', label='Строительство')
 plt.plot(years, education_real_index, marker='o', label='Образование')
 plt.plot(years, healthcare_real_index, marker='o', label='Зравоохранение и социальные услуги')
+
 
 plt.title('Влияние инфляции на изменение реальной заработной платы по сравнению с предыдущим годом (%)')
 
@@ -133,7 +128,7 @@ st.write('Построим графики изменения реальных и
 years = df_salaries_real['year']
 
 construction_real = df_salaries_real['construction']
-fig = plt.figure()
+fig = plt.figure(figsize=(6, 3))
 plt.plot(years, construction_real, marker='o', label='РЗП, рублей')
 plt.plot(years, construction, marker='o', label='НЗП, рублей')
 
@@ -144,7 +139,7 @@ st.pyplot(fig)
 
 
 education_real = df_salaries_real['education']
-fig = plt.figure()
+fig = plt.figure(figsize=(6, 3))
 plt.plot(years, education_real, marker='o', label='РЗП, рублей')
 plt.plot(years, education, marker='o', label='НЗП, рублей')
 
@@ -155,7 +150,7 @@ st.pyplot(fig)
 
 
 healthcare_real = df_salaries_real['healthcare_social_services']
-fig = plt.figure()
+fig = plt.figure(figsize=(6, 3))
 plt.plot(years, healthcare_real, marker='o', label='РЗП, рублей')
 plt.plot(years, healthcare_social_services, marker='o', label='НЗП, рублей')
 
@@ -166,13 +161,13 @@ st.pyplot(fig)
 
 st.write('На всех трех графиках видно, что НЗП и РЗП сначала идут почти вровень, но потом можно наблюдать снижение РЗП относительно НЗП.')
 
-def on_change(key):
-    selection = st.session_state[key]
-
-
 
 with st.sidebar:
-    selected = option_menu("Меню", ['Номинальная заработная плата', 'Инфляция', 'Реальная заработная плата',
-                                         'Влияние инфляции'],
-        icons=['credit-card-2-front', 'bank', 'credit-card-2-front-fill', 'bar-chart'], menu_icon="list-task", default_index=0,
-                            on_change=on_change, key='main_menu')
+    image = Image.open('increase_chart.jpg')
+    st.image(image, width=280)
+
+    st.write('Меню')
+    st.markdown(':credit_card: [Номинальная заработная плата](#salaries)')
+    st.markdown(':bank: [Инфляция](#inflation)')
+    st.markdown(':bar_chart: [Реальная заработная плата](#salaries-real)')
+    st.markdown(':chart_with_upwards_trend: [Влияние инфляции](#inflation-influence)')
