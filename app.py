@@ -4,12 +4,12 @@ import mpld3
 import streamlit.components.v1 as components
 from PIL import Image
 
-from data import get_salaries, get_inflation, get_salaries_real, get_inflation_influence
-
 st.set_page_config(
     page_title='Анализ данных о заработных платах',
     layout='wide'
 )
+
+from data import *
 
 st.header('Среднемесячная номинальная заработная плата по трем видам экономической деятельности за 2000-2023 гг.', anchor='salaries')
 
