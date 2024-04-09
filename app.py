@@ -166,7 +166,7 @@ with st.sidebar:
     image = Image.open('increase_chart.jpg')
     st.image(image, width=280)
 
-    st.write('Меню')
+    st.subheader('Меню')
     st.markdown(':credit_card: [Номинальная заработная плата](#salaries)')
     st.markdown(':bank: [Инфляция](#inflation)')
     st.markdown(':bar_chart: [Реальная заработная плата](#salaries-real)')
